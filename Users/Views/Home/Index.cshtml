@@ -1,0 +1,73 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script>
+        function getUsers() {
+            $.getJSON("http://localhost:44108/api/users",
+                function (data) {
+                    $.each(data, function (key, val) {
+                        var row = "<td>" + val.First_Name + '</td><td>' + val.Last_Name + '</td><td>' + val.Age + '</td>';
+                        $('<tr/>', { html: row }).appendTo($('#Users'));
+                    });
+                });
+        }
+
+        function createUser() {
+            var userData = {
+                First_Name: document.getElementById("first_name").value,
+                Last_Name: document.getElementById("last_name").value,
+                Age: document.getElementById("age").value
+                
+            };
+            return $.ajax({
+                type: "POST",
+                data: JSON.stringify(userData),
+                url: "http://localhost:44108/api/users",
+                contentType: "application/json",
+                dataType: "json",
+                async: false,
+                success: function (data, textStatus, error) {
+                    alert("Success");
+                },
+                error: function (data, textStatus, error) {
+                    alert("Insert Errror");
+                }
+            });
+        }
+
+        $(document).ready(getUsers);
+    </script>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+    <table id="Users">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Age</th>
+                <th>Task Count</th>
+                <th>Completed Tasks</th>
+            </tr>
+        </thead>
+    </table>
+    <form id="Form" method="post", action="/" onsubmit="createUser()">
+        <label for="first_name">First Name:</label>
+        <input type="text"  name="first_name"  id="first_name" />
+        <label for="last_name">Last Name:</label>
+        <input type="text"  name="last_name"  id="last_name" />
+        <label for="age">First Name:</label>
+        <input type="text"  name="age"  id="age" min="1" max="100"/>
+        <button type="submit">Add</button>
+    </form>
+    </div>
+</body>
+</html>

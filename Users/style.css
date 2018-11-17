@@ -1,0 +1,18 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+#Users{
+    border-collapse: collapse;
+    border: 1px solid black;
+    display: inline-block;
+    margin: auto;
+    margin-top: 50px;
+}
+
+#Users tr, #Users tr td{
+    border: 1px solid black;
+    border-collapse: collapse;
+}
