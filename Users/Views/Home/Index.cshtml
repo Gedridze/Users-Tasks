@@ -9,11 +9,19 @@
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
     <script>
         function getUsers() {
-            $.getJSON("http://localhost:44108/api/users",
+            $.getJSON("http://localhost:44108/api/users/get",
                 function (data) {
                     $.each(data, function (key, val) {
-                        var row = "<td>" + val.First_Name + '</td><td>' + val.Last_Name + '</td><td>' + val.Age + '</td>';
-                        $('<tr/>', { html: row }).appendTo($('#Users'));
+                        $.getJSON("http://localhost:44108/api/tasks/getUserTasksCount/" + val.Id,
+                            function (taskCount) {
+                                $.getJSON("http://localhost:44108/api/tasks/getUserCompletedTasks/" + val.Id,
+                                    function (completed) {
+                                        var row = "<td>" + val.First_Name + '</td><td>' + val.Last_Name + '</td><td>' + val.Age + '</td><td>' + taskCount + '</td><td>' + completed + '</td>';
+                                        $('<tr/>', { html: row }).appendTo($('#Users'));
+                                    });
+                                
+                            });
+                        
                     });
                 });
         }
@@ -28,12 +36,12 @@
             return $.ajax({
                 type: "POST",
                 data: JSON.stringify(userData),
-                url: "http://localhost:44108/api/users",
+                url: "http://localhost:44108/api/users/create",
                 contentType: "application/json",
                 dataType: "json",
                 async: false,
                 success: function (data, textStatus, error) {
-                    alert("Success");
+                    return;
                 },
                 error: function (data, textStatus, error) {
                     alert("Insert Errror");
@@ -56,6 +64,7 @@
                 <th>Age</th>
                 <th>Task Count</th>
                 <th>Completed Tasks</th>
+                <th>Actions</th>
             </tr>
         </thead>
     </table>
@@ -64,7 +73,7 @@
         <input type="text"  name="first_name"  id="first_name" />
         <label for="last_name">Last Name:</label>
         <input type="text"  name="last_name"  id="last_name" />
-        <label for="age">First Name:</label>
+        <label for="age">Age:</label>
         <input type="text"  name="age"  id="age" min="1" max="100"/>
         <button type="submit">Add</button>
     </form>

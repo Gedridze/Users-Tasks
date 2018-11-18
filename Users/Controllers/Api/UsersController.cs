@@ -12,21 +12,21 @@ namespace Users.Controllers.Api
     public class UsersController : ApiController
     {
         UsersContext _context = new UsersContext();
-        // GET: api/Users
+        // GET: api/Users/get
         public List<User> Get()
         {
             return _context.users.ToList();
         }
 
-        // GET: api/Users/5
+        // GET: api/Users/Get/5
         public User Get(int id)
         {
             return _context.users.ToList().First(usr => usr.Id == id);
         }
 
-        // POST: api/Users
+        // POST: api/Users/create
         [HttpPost]
-        public User Post(User user)
+        public User Create(User user)
         {
             if (!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
@@ -35,8 +35,8 @@ namespace Users.Controllers.Api
             return user;
         }
 
-        // PUT: api/Users/5
-        public void Put(int id, User user)
+        // PUT: api/Users/Update/5
+        public void Update(int id, User user)
         {
             if (!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
@@ -44,9 +44,12 @@ namespace Users.Controllers.Api
             _context.users.ToList()[id] = user;
         }
 
-        // DELETE: api/Users/5
+        // DELETE: api/Users/delete/5
         public void Delete(int id)
         {
+            if (!ModelState.IsValid)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            _context.users.ToList().RemoveAt(id);
         }
     }
 }
