@@ -15,7 +15,7 @@ namespace Users.Controllers.DataLayer
             {
                 var users = new List<User>
                 {
-                    new User{First_Name = "Edvinas", Last_Name = "Kilciauslas", Age = 21}
+                    new User{First_Name = "Edvinas", Last_Name = "Kilciauskas", Age = 21}
                 };
                 users.ForEach(x => context.users.Add(x));
                 context.SaveChanges();

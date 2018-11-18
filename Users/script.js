@@ -1,12 +1,16 @@
 ﻿
 //Users View Functions
 function getUsers() {
-    $.getJSON("http://localhost:44108/api/users/get",
+    $.getJSON("/api/users/get",
         function (data) {
             $.each(data, function (key, val) {
-                $.getJSON("http://localhost:44108/api/tasks/getUserTasksCount/" + val.Id,
+                $.getJSON(
+                    {
+                        url: "/api/tasks/getUserTasksCount/" + val.Id,
+                        async: false
+                    },
                     function (taskCount) {
-                        $.getJSON("http://localhost:44108/api/tasks/getUserCompletedTasks/" + val.Id,
+                        $.getJSON("/api/tasks/getUserCompletedTasks/" + val.Id,
                             function (completed) {
                                 $("<tr id=User_" + val.Id + ">" +
                                     "<td contenteditable=true id=userFirst_" + val.Id + ">" + val.First_Name + "</td>" +
@@ -31,27 +35,31 @@ function createUser() {
         Age: document.getElementById("age").value
 
     };
-    return $.ajax({
-        type: "POST",
-        data: JSON.stringify(userData),
-        url: "http://localhost:44108/api/users/create",
-        contentType: "application/json",
-        dataType: "json",
-        async: false,
-        success: function (data, textStatus, error) {
-            return;
-        },
-        error: function (data, textStatus, error) {
-            alert("Insert Errror");
-        }
-    });
+    if (Number.isInteger(+userData.Age)) {
+        return $.ajax({
+            type: "POST",
+            data: JSON.stringify(userData),
+            url: "/api/users/create",
+            contentType: "application/json",
+            dataType: "json",
+            async: false,
+            success: function (data, textStatus, error) {
+                return;
+            },
+            error: function (data, textStatus, error) {
+                alert("Insert Errror");
+            }
+        });
+    }
+    else alert("Age must be a number");
 }
 
 function updateUser(id) {
     var data = {
         First_Name: document.getElementById("userFirst_" + id).innerHTML,
         Last_Name: document.getElementById("userLast_" + id).innerHTML,
-        Age: document.getElementById("userAge_" + id).innerHTML
+        Age: document.getElementById("userAge_" + id).innerHTML,
+        Id: id
     };
     if (Number.isInteger(+data.Age)) {
         return $.ajax({
@@ -60,7 +68,7 @@ function updateUser(id) {
             async: false,
             contentType: "application/json",
             datatype: 'json',
-            url: "http://localhost:44108/api/users/update/",
+            url: "/api/users/update/",
             success: function () {
             },
             error: function () {
@@ -79,7 +87,7 @@ function deleteUser(id) {
     return $.ajax({
         type: "DELETE",
         async: false,
-        url: "http://localhost:44108/api/users/delete/" + id,
+        url: "/api/users/delete/" + id,
         success: function (data, textStatus, error) {
             return;
         },
@@ -92,12 +100,12 @@ function deleteUser(id) {
 
 //UserInfo View functions
 function showUserInfo(id) {
-    $.get("http://localhost:44108/api/users/get/" + id,
+    $.get("/api/users/get/" + id,
         function (user) {
             $("<h1>User's " + user.First_Name + " " + user.Last_Name + " info</h1>").appendTo("#info");
-            $.get("http://localhost:44108/api/tasks/getusertaskscount/" + id,
+            $.get("/api/tasks/getusertaskscount/" + id,
                 function (count) {
-                    $.get("http://localhost:44108/api/tasks/getUserCompletedTasks/" + id,
+                    $.get("/api/tasks/getUserCompletedTasks/" + id,
                         function (completed) {
                             $("<p style='float:right'>Total Tasks: " + count + ", Completed Tasks: " + completed + "</p>").appendTo("#info");
 
@@ -123,7 +131,7 @@ function deleteTask(taskId) {
 
     return $.ajax({
         type: "DELETE",
-        url: "http://localhost:44108/api/tasks/delete/" + taskId,
+        url: "/api/tasks/delete/" + taskId,
         success: function (data, textStatus, error) {
             return;
         },
@@ -151,7 +159,7 @@ function updateTask(id) {
         async: false,
         contentType: "application/json",
         datatype: 'json',
-        url: "http://localhost:44108/api/tasks/update/" + id,
+        url: "/api/tasks/update/" + id,
         success: function () {
             return;
         },
@@ -172,7 +180,7 @@ function createTask() {
     return $.ajax({
         type: "POST",
         data: JSON.stringify(taskData),
-        url: "http://localhost:44108/api/tasks/create",
+        url: "/api/tasks/create",
         contentType: "application/json",
         async: false,
         dataType: "json",

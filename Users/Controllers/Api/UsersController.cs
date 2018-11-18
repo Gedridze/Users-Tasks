@@ -15,7 +15,7 @@ namespace Users.Controllers.Api
         // GET: api/Users/get
         public List<User> Get()
         {
-            return _context.users.ToList();
+            return _context.users.OrderBy(x => x.First_Name).ToList();
         }
 
         // GET: api/Users/Get/5

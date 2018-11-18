@@ -16,7 +16,7 @@ namespace Users.Controllers.Api
         // GET: api/Tasks/get
         public List<Task> Get()
         {
-            return _context.tasks.ToList();
+            return _context.tasks.OrderBy(x=>x.Name).ToList();
         }
 
         // GET: api/Tasks/GetUserTasks/{id}
