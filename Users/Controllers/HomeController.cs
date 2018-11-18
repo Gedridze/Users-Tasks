@@ -12,11 +12,15 @@ namespace Users.Controllers
     {
         public ActionResult Index()
         {
-            using (UsersContext contex = new UsersContext())
-            {
-                List<User> users = contex.users.ToList();
-                return View(users);
-            }
+                return View();
         }
+
+        public ActionResult UserInfo(int id)
+        {
+            ViewBag.Id = id;
+            return View();
+        }
+
+        
     }
 }

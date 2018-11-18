@@ -37,19 +37,30 @@ namespace Users.Controllers.Api
             return GetUserTasks(id).Where(x => x.Completed == true).Count();
         }
 
-        // POST: api/Tasks
-        public void Post([FromBody]string value)
+        // POST: api/Tasks/Create
+        public void Create(Task task)
         {
+            _context.tasks.Add(task);
+            _context.SaveChanges();
         }
 
-        // PUT: api/Tasks/5
-        public void Put(int id, [FromBody]string value)
+        // PUT: api/Tasks/Update/{id}
+        [HttpPut]
+        public void Update(Task task)
         {
+            if (!ModelState.IsValid)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            _context.tasks.ToList().Where(x => x.Id == task.Id).First().Name = task.Name;
+            _context.tasks.ToList().Where(x => x.Id == task.Id).First().Completed = task.Completed;
+            _context.SaveChanges();
         }
 
-        // DELETE: api/Tasks/5
+        // DELETE: api/Tasks/Delete/{id}
+        [HttpDelete]
         public void Delete(int id)
         {
+            _context.tasks.Remove(_context.tasks.Where(x => x.Id == id).First());
+            _context.SaveChanges();
         }
     }
 }

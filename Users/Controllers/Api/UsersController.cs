@@ -36,20 +36,22 @@ namespace Users.Controllers.Api
         }
 
         // PUT: api/Users/Update/5
-        public void Update(int id, User user)
+        [HttpPut]
+        public void Update(User user)
         {
             if (!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
-            _context.users.ToList().RemoveAt(id);
-            _context.users.ToList()[id] = user;
+            _context.users.ToList().Where(x => x.Id == user.Id).First().First_Name = user.First_Name;
+            _context.users.ToList().Where(x => x.Id == user.Id).First().Last_Name = user.Last_Name;
+            _context.users.ToList().Where(x => x.Id == user.Id).First().Age = user.Age;
+            _context.SaveChanges();
         }
 
         // DELETE: api/Users/delete/5
         public void Delete(int id)
         {
-            if (!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
-            _context.users.ToList().RemoveAt(id);
+            _context.users.Remove(_context.users.Where(x => x.Id == id).First());
+            _context.SaveChanges();
         }
     }
 }

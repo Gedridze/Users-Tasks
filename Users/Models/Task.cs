@@ -17,6 +17,7 @@ namespace Users.Models
         public int User_id { get; set; }
         public string Name { get; set; }
         public bool Completed { get; set; }
+        public int Id { get; set; }
     
         public virtual User User { get; set; }
     }

@@ -7,6 +7,7 @@
 <html>
 <head>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <link type="text/javascript" href="/script.js"/>
     <script>
         function getUsers() {
             $.getJSON("http://localhost:44108/api/users/get",
@@ -16,8 +17,14 @@
                             function (taskCount) {
                                 $.getJSON("http://localhost:44108/api/tasks/getUserCompletedTasks/" + val.Id,
                                     function (completed) {
-                                        var row = "<td>" + val.First_Name + '</td><td>' + val.Last_Name + '</td><td>' + val.Age + '</td><td>' + taskCount + '</td><td>' + completed + '</td>';
-                                        $('<tr/>', { html: row }).appendTo($('#Users'));
+                                        $("<tr id=User_" + val.Id + ">" +
+                                            "<td contenteditable=true id=userFirst_" + val.Id + ">" + val.First_Name + "</td>" +
+                                            "<td contenteditable=true id=userLast_" + val.Id + ">" + val.Last_Name + "</td>" +
+                                            "<td contenteditable=true class=age id=userAge_" + val.Id + ">" + val.Age + "</td>" +
+                                            "<td>" + taskCount + "</td>"+
+                                            "<td>" + completed + "</td>" +
+                                            "<td><a href=/Home/UserInfo/" + val.Id + ">Show tasks</a>|<a href='/home/' onclick=updateUser(" + val.Id + ")>Edit</a>|<a href='/home/' onclick=deleteUser(" + val.Id + ")>Delete</a></td>" +
+                                            "</tr>").appendTo($('.table'));
                                     });
                                 
                             });
@@ -49,14 +56,61 @@
             });
         }
 
-        $(document).ready(getUsers);
+        function updateUser(id) {
+            var data = {
+                First_Name: document.getElementById("userFirst_" + id).innerHTML,
+                Last_Name: document.getElementById("userLast_" + id).innerHTML,
+                Age: document.getElementById("userAge_" + id).innerHTML
+            };
+            if (Number.isInteger(+data.Age)) {
+                return $.ajax({
+                    type: "PUT",
+                    data: JSON.stringify(data),
+                    async: false,
+                    contentType: "application/json",
+                    datatype: 'json',
+                    url: "http://localhost:44108/api/users/update/",
+                    success: function () {
+                    },
+                    error: function () {
+                        alert("Insert error");
+                    }
+
+                });
+            }
+            else {
+                alert("Age must be a number");
+            }
+        }
+
+        function deleteUser(id) {
+
+            return $.ajax({
+                type: "DELETE",
+                async: false,
+                url: "http://localhost:44108/api/users/delete/" + id,
+                success: function (data, textStatus, error) {
+                    return;
+                },
+                error: function (data, textStatus, error) {
+                }
+            });
+
+        }
+
+        
+                    
+        
+
+        $(document).ready(getUsers());
     </script>
     <meta name="viewport" content="width=device-width" />
+    <link type="text/css" href="~/style.css", rel="stylesheet"/>
     <title></title>
 </head>
 <body>
     <div>
-    <table id="Users">
+    <table class="table">
         <thead>
             <tr>
                 <th>First Name</th>
@@ -67,6 +121,7 @@
                 <th>Actions</th>
             </tr>
         </thead>
+
     </table>
     <form id="Form" method="post", action="/" onsubmit="createUser()">
         <label for="first_name">First Name:</label>
@@ -78,5 +133,6 @@
         <button type="submit">Add</button>
     </form>
     </div>
+        
 </body>
 </html>

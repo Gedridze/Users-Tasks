@@ -4,18 +4,15 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="UsersDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'USERSDATABASE_dbece8d6c99941eaafca85a80bf33935.dbo.Tasks' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+    <Schema Namespace="UsersDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Tasks">
           <Key>
-            <PropertyRef Name="User_id" />
-            <PropertyRef Name="Name" />
-            <PropertyRef Name="Completed" />
+            <PropertyRef Name="Id" />
           </Key>
           <Property Name="User_id" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Completed" Type="bit" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -39,21 +36,14 @@ warning 6002: The table/view 'USERSDATABASE_dbece8d6c99941eaafca85a80bf33935.dbo
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="UsersDatabaseModelStoreContainer">
+          <EntitySet Name="Tasks" EntityType="Self.Tasks" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Tasks" EntityType="Self.Tasks" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Tasks].[User_id] AS [User_id], 
-    [Tasks].[Name] AS [Name], 
-    [Tasks].[Completed] AS [Completed]
-    FROM [dbo].[Tasks] AS [Tasks]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_Tasks_ToUsers" Association="Self.FK_Tasks_ToUsers">
             <End Role="Users" EntitySet="Users" />
             <End Role="Tasks" EntitySet="Tasks" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="UsersDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -69,14 +59,13 @@ warning 6002: The table/view 'USERSDATABASE_dbece8d6c99941eaafca85a80bf33935.dbo
         </EntityType>
         <EntityType Name="Task">
           <Key>
-            <PropertyRef Name="User_id" />
-            <PropertyRef Name="Name" />
-            <PropertyRef Name="Completed" />
+            <PropertyRef Name="Id" />
           </Key>
           <Property Name="User_id" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Completed" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="User" Relationship="Self.FK_Tasks_ToUsers" FromRole="Tasks" ToRole="Users" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
         <Association Name="FK_Tasks_ToUsers">
           <End Role="Users" Type="Self.User" Multiplicity="1" />
@@ -117,6 +106,7 @@ warning 6002: The table/view 'USERSDATABASE_dbece8d6c99941eaafca85a80bf33935.dbo
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="UsersDatabaseModel.Task">
               <MappingFragment StoreEntitySet="Tasks">
+                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="User_id" ColumnName="User_id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Completed" ColumnName="Completed" />

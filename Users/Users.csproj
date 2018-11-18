@@ -124,6 +124,7 @@
       <DependentUpon>UsersModel.edmx</DependentUpon>
       <LastGenOutput>UsersModel.cs</LastGenOutput>
     </Content>
+    <Content Include="script.js" />
     <Content Include="style.css" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -172,6 +173,7 @@
     </Content>
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\UserInfo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

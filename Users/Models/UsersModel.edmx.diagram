@@ -6,7 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="c70dd32ca2034f918473cea676e81b73" Name="Diagram1">
         <EntityTypeShape EntityType="UsersDatabaseModel.User" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="UsersDatabaseModel.Task" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="UsersDatabaseModel.Task" Width="1.5" PointX="3.375" PointY="0.875" IsExpanded="true" />
         <AssociationConnector Association="UsersDatabaseModel.FK_Tasks_ToUsers" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
