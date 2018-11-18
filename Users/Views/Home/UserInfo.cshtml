@@ -8,114 +8,9 @@
 <html>
 <head>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script src="~/script.js"></script>
     <meta name="viewport" content="width=device-width" />
     <title></title>
-    <script>
-
-        function showUserInfo(id) {
-            $.get("http://localhost:44108/api/users/get/" + id,
-                function (user) {
-                    $("<h1>User's " + user.First_Name + " " + user.Last_Name + " info</h1>").appendTo("#info");
-                    $.get("http://localhost:44108/api/tasks/getusertaskscount/" + id,
-                        function (count) {
-                            $.get("http://localhost:44108/api/tasks/getUserCompletedTasks/" + id,
-                                function (completed) {
-                                    $("<p style='float:right'>Total Tasks: " + count + ", Completed Tasks: " + completed + "</p>").appendTo("#info");
-                                   
-                                    $.each(user.Tasks, function (key, val) {
-                                        if (val.Completed) {
-                                            var completed = "Completed";
-                                        }
-                                        else { var completed = "Not completed"; }
-                                        $("<tr id='Task_" + val.Name + "'>" +
-                                            "<td contenteditable=true id=TaskName_" + val.Id + ">" + val.Name + "</td>" +
-                                            "<td onclick=changeStatus(" + val.Id + ") id=currentStatus_" + val.Id + ">" + completed + "</td>" +
-                                            "<td><a onclick=updateTask(" + val.Id + ") href='/home/userinfo/" + id  + "'>Update</a>|<a onclick=deleteTask(" + val.Id + ") href='/home/userinfo/" + id + "'>Delete</a></td>" +
-                                            "</tr>").appendTo(".table");
-                                        $("<tr ></>")
-                                    });
-                                });
-                        });
-                });
-        }
-
-        function deleteTask(taskId) {
-                
-                return $.ajax({
-                    type: "DELETE",
-                    url: "http://localhost:44108/api/tasks/delete/" + taskId,
-                    success: function (data, textStatus, error) {
-                        return;
-                    },
-                    error: function (data, textStatus, error) {
-                        
-                    }
-                });
-           
-        }
-
-        function updateTask(id) {
-            if (document.getElementById("currentStatus_" + id).innerHTML == "Completed") {
-                var status = true;
-            }
-            else var status = false;
-            var taskData = {
-                Name: document.getElementById("TaskName_" + id).innerHTML,
-                Completed: status,
-                User_id: document.getElementById("user_id").value,
-                Id: id
-            };
-            return $.ajax({
-                type: "PUT",
-                data: JSON.stringify(taskData),
-                async: false,
-                contentType: "application/json",
-                datatype: 'json',
-                url: "http://localhost:44108/api/tasks/update/" + id,
-                success: function () {
-                    return;
-                },
-                error: function () {
-                    alert(JSON.stringify(taskData));
-                }
-
-            });
-        }
-
-        function createTask() {
-            var taskData = {
-                Name: document.getElementById("task_name").value,
-                Completed: document.getElementById("status").checked,
-                User_id: document.getElementById("user_id").value
-
-            };
-            return $.ajax({
-                type: "POST",
-                data: JSON.stringify(taskData),
-                url: "http://localhost:44108/api/tasks/create",
-                contentType: "application/json",
-                async: false,
-                dataType: "json",
-                success: function (data, textStatus, error) {
-                    return;
-                },
-                error: function (data, textStatus, error) {
-                    
-                }
-            });
-        }
-
-        function changeStatus(id) {
-            x = document.getElementById("currentStatus_" + id);
-            if (x.innerHTML === "Completed") {
-                x.innerHTML = "Not completed";
-            }
-            else x.innerHTML = "Completed";
-                    
-        }
-
-        $(document).ready(showUserInfo(@ViewBag.Id));
-    </script>
     <link type="text/css" href="~/style.css" , rel="stylesheet" />
 
 </head>
@@ -147,5 +42,6 @@
 
         <a href="/Home/"><< Back</a>
     </div>
+    <script>$(document).ready(showUserInfo(@ViewBag.Id));</script>
 </body>
 </html>

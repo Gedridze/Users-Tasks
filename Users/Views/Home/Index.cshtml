@@ -7,123 +7,28 @@
 <html>
 <head>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
-    <link type="text/javascript" href="/script.js"/>
-    <script>
-        function getUsers() {
-            $.getJSON("http://localhost:44108/api/users/get",
-                function (data) {
-                    $.each(data, function (key, val) {
-                        $.getJSON("http://localhost:44108/api/tasks/getUserTasksCount/" + val.Id,
-                            function (taskCount) {
-                                $.getJSON("http://localhost:44108/api/tasks/getUserCompletedTasks/" + val.Id,
-                                    function (completed) {
-                                        $("<tr id=User_" + val.Id + ">" +
-                                            "<td contenteditable=true id=userFirst_" + val.Id + ">" + val.First_Name + "</td>" +
-                                            "<td contenteditable=true id=userLast_" + val.Id + ">" + val.Last_Name + "</td>" +
-                                            "<td contenteditable=true class=age id=userAge_" + val.Id + ">" + val.Age + "</td>" +
-                                            "<td>" + taskCount + "</td>"+
-                                            "<td>" + completed + "</td>" +
-                                            "<td><a href=/Home/UserInfo/" + val.Id + ">Show tasks</a>|<a href='/home/' onclick=updateUser(" + val.Id + ")>Edit</a>|<a href='/home/' onclick=deleteUser(" + val.Id + ")>Delete</a></td>" +
-                                            "</tr>").appendTo($('.table'));
-                                    });
-                                
-                            });
-                        
-                    });
-                });
-        }
-
-        function createUser() {
-            var userData = {
-                First_Name: document.getElementById("first_name").value,
-                Last_Name: document.getElementById("last_name").value,
-                Age: document.getElementById("age").value
-                
-            };
-            return $.ajax({
-                type: "POST",
-                data: JSON.stringify(userData),
-                url: "http://localhost:44108/api/users/create",
-                contentType: "application/json",
-                dataType: "json",
-                async: false,
-                success: function (data, textStatus, error) {
-                    return;
-                },
-                error: function (data, textStatus, error) {
-                    alert("Insert Errror");
-                }
-            });
-        }
-
-        function updateUser(id) {
-            var data = {
-                First_Name: document.getElementById("userFirst_" + id).innerHTML,
-                Last_Name: document.getElementById("userLast_" + id).innerHTML,
-                Age: document.getElementById("userAge_" + id).innerHTML
-            };
-            if (Number.isInteger(+data.Age)) {
-                return $.ajax({
-                    type: "PUT",
-                    data: JSON.stringify(data),
-                    async: false,
-                    contentType: "application/json",
-                    datatype: 'json',
-                    url: "http://localhost:44108/api/users/update/",
-                    success: function () {
-                    },
-                    error: function () {
-                        alert("Insert error");
-                    }
-
-                });
-            }
-            else {
-                alert("Age must be a number");
-            }
-        }
-
-        function deleteUser(id) {
-
-            return $.ajax({
-                type: "DELETE",
-                async: false,
-                url: "http://localhost:44108/api/users/delete/" + id,
-                success: function (data, textStatus, error) {
-                    return;
-                },
-                error: function (data, textStatus, error) {
-                }
-            });
-
-        }
-
-        
-                    
-        
-
-        $(document).ready(getUsers());
-    </script>
+    <script src="~/script.js"></script>
     <meta name="viewport" content="width=device-width" />
     <link type="text/css" href="~/style.css", rel="stylesheet"/>
+
     <title></title>
 </head>
 <body>
     <div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Age</th>
-                <th>Task Count</th>
-                <th>Completed Tasks</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Age</th>
+                    <th>Task Count</th>
+                    <th>Completed Tasks</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
 
-    </table>
-    <form id="Form" method="post", action="/" onsubmit="createUser()">
+        </table>
+        <form id="Form" method="post", action="/" onsubmit="createUser()">
         <label for="first_name">First Name:</label>
         <input type="text"  name="first_name"  id="first_name" />
         <label for="last_name">Last Name:</label>
@@ -131,8 +36,8 @@
         <label for="age">Age:</label>
         <input type="text"  name="age"  id="age" min="1" max="100"/>
         <button type="submit">Add</button>
-    </form>
+        </form>
     </div>
-        
+    <script>$(document).ready(getUsers());</script>
 </body>
 </html>

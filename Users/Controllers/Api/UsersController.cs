@@ -51,6 +51,7 @@ namespace Users.Controllers.Api
         public void Delete(int id)
         {
             _context.users.Remove(_context.users.Where(x => x.Id == id).First());
+            _context.tasks.RemoveRange(_context.tasks.Where(x => x.User_id == id));
             _context.SaveChanges();
         }
     }

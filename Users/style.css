@@ -1,4 +1,8 @@
-﻿body {
+﻿*{
+    font-family:Arial, sans-serif;
+}
+
+body {
     margin: 0;
     padding: 0;
     text-align: center;
@@ -21,6 +25,21 @@
 
 .table tr{
     width: 100%;
+}
+.table thead{
+    background-color: lightgray;
+}
+.table tr td, th{
+    padding: 5px;
+}
+
+.table tr td a{
+    text-decoration: none;
+    transition: .5s;
+}
+
+.table tr td a:hover{
+    background-color: lightgray;
 }
 
 #info{
